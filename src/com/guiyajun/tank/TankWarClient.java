@@ -43,8 +43,8 @@ public class TankWarClient extends Frame {
     public List<Blood> bloods = new ArrayList<>();
     /** 定义一个虚拟屏幕，目的是双缓冲，先把图片画到虚拟屏幕上 */
     Image backScreen = null;
-    /** 为主坦克定义一个变量 */
-    MyTank myTank = null;
+    /** 创建一个主坦克 */
+    MyTank myTank = new MyTank(700, 400, true, this);
     /** 一次自动生产出的地方坦克数量 */
     private int tankProductionQuantity = 10;
     
@@ -74,6 +74,10 @@ public class TankWarClient extends Frame {
     * @throws
      */
     public void lauchFrame() {
+        // 如果敌方坦克被完全消灭根据设定值重新产生坦克
+        for(int i=0; i<tankProductionQuantity; i++) {
+            enemyTanks.add(new EnemyTank(150, 80 + (50 * i), false, this));
+        }
         // 定义客户端的属性
         this.setTitle("TankWar");
         this.setLocation(40, 120);
@@ -97,8 +101,6 @@ public class TankWarClient extends Frame {
         
         // 启动画面刷新线程池
         ThreadPoolService.getInstance().execute(new PaintTank()); 
-        // 创建一个主坦克
-        myTank = new MyTank(700, 400, true, this);
         // 创建两个加血包到集合
         bloods.add(new Blood(400, 300, this));
         bloods.add(new Blood(700, 300, this));
